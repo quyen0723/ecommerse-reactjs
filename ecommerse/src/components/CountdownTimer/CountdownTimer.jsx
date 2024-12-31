@@ -31,10 +31,10 @@ function CountdownTimer({ targetDate }) {
     const formatNumber = (number) => String(number).padStart(2, '0');
 
     const timerComponents = [];
-    Object.keys(timeLeft).forEach((interval) => {
+    Object.keys(timeLeft).forEach((interval, index) => {
         if (timeLeft[interval] !== undefined) {
             timerComponents.push(
-                <span key={interval} className={box}>
+                <span key={`${interval}-${index}`} className={box}>
                     {formatNumber(timeLeft[interval])}{' '}
                     <span className={title}>{interval}</span>
                 </span>

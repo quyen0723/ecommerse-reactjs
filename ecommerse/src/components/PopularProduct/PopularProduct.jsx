@@ -1,18 +1,14 @@
-import CountdownBanner from '@components/CountdownBanner/CountdownBanner';
 import MainLayout from '@components/Layout/Layout';
 import styles from './styles.module.scss';
+import React from 'react';
 import ProductItem from '@components/ProductItem/ProductItem';
-// import React from 'react';
 
-function HeadingListProducts({ data }) {
-    const { container, containerItem } = styles;
-
-    console.log('kakaka', data);
+function PopularProduct({ data }) {
+    const { container } = styles;
     return (
-        <MainLayout>
-            <div className={container}>
-                <CountdownBanner />
-                <div className={containerItem}>
+        <>
+            <MainLayout>
+                <div className={container}>
                     {data.map((item) => (
                         <ProductItem
                             key={item.id}
@@ -22,12 +18,10 @@ function HeadingListProducts({ data }) {
                             price={item.price}
                         />
                     ))}
-                    {/* <ProductItem />
-                    <ProductItem /> */}
                 </div>
-            </div>
-        </MainLayout>
+            </MainLayout>
+        </>
     );
 }
 
-export default HeadingListProducts;
+export default PopularProduct;
