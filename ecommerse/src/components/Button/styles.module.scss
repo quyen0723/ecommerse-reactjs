@@ -2,13 +2,9 @@
 @import '@styles/variable.module.scss';
 
 .btn {
-    @include btn(176px, 42px, $primary_color, 3px);
-
-    // color: $white_color;
+    @include btn(100%, 42px, $primary_color, 3px);
     font-size: 14px;
     font-weight: 300;
-    // padding: 13px 45px;
-
     cursor: pointer;
 
     &:hover {

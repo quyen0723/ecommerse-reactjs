@@ -11,8 +11,6 @@ import SaleHomepage from '@components/SaleHomepage/SaleHomepage';
 import Myfooter from '@components/Footer/Footer';
 
 function HomePage() {
-    const { container } = styles;
-
     const [listProducts, setListProducts] = useState([]);
     useEffect(() => {
         getProducts().then((res) => {
@@ -20,7 +18,7 @@ function HomePage() {
         });
     }, []);
 
-    console.log(listProducts);
+    // console.log(listProducts);
     return (
         // <div className={container}>
         //     <MyHeader />
@@ -41,7 +39,6 @@ function HomePage() {
             />
             <SaleHomepage />
             <Myfooter />
-            {/* <div style={{ height: '200px' }}></div> */}
         </>
     );
 }

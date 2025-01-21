@@ -1,27 +1,31 @@
-import AdvanceHeadling from '@components/AdvanceHeadling/AdvanceHeadling';
-import Blog from '@components/Blog/Blog';
-import HomePage from '@components/HomePage/HomePage';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+// import { SideBarProvider } from '@/contexts/SideBar';
+import Sidebar from '@components/Sidebar/Sidebar';
 import routers from '@routers/routers';
 import { Suspense } from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { SideBarProvider } from '@/contexts/SideBarProvider';
 
 function App() {
     return (
-        <BrowserRouter>
-            <Suspense fallback={<div>Loading...</div>}>
-                <Routes>
-                    {routers.map((item, index) => {
-                        return (
-                            <Route
-                                key={index}
-                                path={item.path}
-                                element={<item.component />}
-                            />
-                        );
-                    })}
-                </Routes>
-            </Suspense>
-        </BrowserRouter>
+        <SideBarProvider>
+            <Sidebar />
+
+            <BrowserRouter>
+                <Suspense fallback={<div>Loading...</div>}>
+                    <Routes>
+                        {routers.map((item, index) => {
+                            return (
+                                <Route
+                                    key={index}
+                                    path={item.path}
+                                    element={<item.component />}
+                                />
+                            );
+                        })}
+                    </Routes>
+                </Suspense>
+            </BrowserRouter>
+        </SideBarProvider>
     );
 }
 

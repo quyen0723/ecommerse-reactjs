@@ -7,8 +7,9 @@ import reloadIcon from '@icons/svgs/reloadIcon.svg';
 import heartIcon from '@icons/svgs/heartIcon.svg';
 import cartIcon from '@icons/svgs/cartIcon.svg';
 import useScrollHandling from '@/hooks/useScrollHandling';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import classNames from 'classnames';
+import { SideBarContext } from '@/contexts/SideBarProvider';
 
 function MyHeader() {
     const {
@@ -26,6 +27,12 @@ function MyHeader() {
     const [fixedPosition, setFixedPosition] = useState(false);
 
     console.log('MMMMMM', scrollPosition);
+
+    const { isOpen, setIsOpen } = useContext(SideBarContext);
+
+    console.log('lalalala', isOpen);
+    console.log('huhuhuhu', setIsOpen);
+    console.log('check', { isOpen, setIsOpen });
 
     useEffect(() => {
         // if (scrollPosition > 80) {
@@ -46,18 +53,23 @@ function MyHeader() {
             <div className={containerHeader}>
                 <div className={containerBox}>
                     <div className={containerBoxIcon}>
-                        {dataBoxIcon.map((item) => {
-                            return (
-                                <BoxIcon type={item.type} href={item.href} />
-                            );
-                        })}
+                        {dataBoxIcon.map((item, index) => (
+                            <BoxIcon
+                                key={item.id || index} // Use item.id if it exists, otherwise fallback to index
+                                type={item.type}
+                                href={item.href}
+                            />
+                        ))}
                     </div>
                     <div className={containerMenu}>
-                        {dataMenu.slice(0, 3).map((item) => {
-                            return (
-                                <Menu content={item.content} href={item.href} />
-                            );
-                        })}
+                        {dataMenu.slice(0, 3).map((item, index) => (
+                            <Menu
+                                key={item.id || index} // Use item.id if it exists, otherwise fallback to index
+                                content={item.content}
+                                href={item.href}
+                                setIsOpen={setIsOpen}
+                            />
+                        ))}
                     </div>
                 </div>
                 <div className={containerLogo}>
@@ -69,11 +81,14 @@ function MyHeader() {
                 </div>
                 <div className={containerBox}>
                     <div className={containerMenu}>
-                        {dataMenu.slice(3, dataMenu.length).map((item) => {
-                            return (
-                                <Menu content={item.content} href={item.href} />
-                            );
-                        })}
+                        {dataMenu.slice(3).map((item, index) => (
+                            <Menu
+                                key={item.id || index + 3} // Ensure unique key for this slice
+                                content={item.content}
+                                href={item.href}
+                                setIsOpen={setIsOpen}
+                            />
+                        ))}
                     </div>
                     <div className={containerBoxIcon}>
                         <img src={reloadIcon} alt='reloadIcon' />
