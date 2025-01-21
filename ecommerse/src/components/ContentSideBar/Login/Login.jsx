@@ -1,5 +1,5 @@
 import InputCommon from '@components/InputCommon/InputCommon';
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './styles.module.scss';
 import Button from '@components/Button/Button';
 import { useFormik } from 'formik';
@@ -7,6 +7,7 @@ import * as Yup from 'yup';
 
 function Login() {
     const { container, title, boxRememberMe, lostPw } = styles;
+    const [isRegister, setIsRegister] = useState(false);
     const formik = useFormik({
         initialValues: {
             email: '',
@@ -18,56 +19,75 @@ function Login() {
                 .required('Email required'),
             password: Yup.string()
                 .min(6, 'Password must be at least 6 characters long')
-                .required('Password equired')
+                .required('Password equired'),
+            cfmpassword: Yup.string().oneOf(
+                [Yup.ref('password'), null],
+                'Password must match'
+            )
         }),
         onSubmit: (values) => {
             console.log('Form submitted:', values);
         }
     });
 
+    const handleToggle = () => {
+        setIsRegister(!isRegister);
+        formik.resetForm();
+    };
+
     // console.log('Form submitted', formik.errors);
     return (
         <div className={container}>
-            <div className={title}>SIGN IN</div>
+            <div className={title}>{isRegister ? 'SIGN UP' : 'SIGN IN'}</div>
             <form onSubmit={formik.handleSubmit}>
                 <InputCommon
                     id='email'
                     label='Email'
                     type='text'
                     isRequired
-                    // onBlur={formik.handleBlur}
-                    // onChange={formik.handleChange}
-                    // value={formik.values.email}
                     formik={formik}
                 />
-                {/* {formik.errors.email && formik.touched.email && (
-                    <div className={styles.errors}>{formik.errors.email}</div>
-                )} */}
                 <InputCommon
                     id='password'
                     label='Password'
                     type='password'
                     isRequired
-                    // onBlur={formik.handleBlur}
-                    // onChange={formik.handleChange}
-                    // value={formik.values.password}
                     formik={formik}
                 />
-
-                {/* {formik.errors.password && formik.touched.password && (
-                    <div className={styles.errors}>
-                        {formik.errors.password}
+                {isRegister && (
+                    <InputCommon
+                        id='cfmpassword'
+                        label='Confirm password'
+                        type='password'
+                        isRequired
+                        formik={formik}
+                    />
+                )}
+                {!isRegister && (
+                    <div className={boxRememberMe}>
+                        <input type='checkbox' />
+                        <span>Remember me</span>
                     </div>
-                )} */}
+                )}
 
-                <div className={boxRememberMe}>
-                    <input type='checkbox' />
-                    <span>Remember me</span>
-                </div>
-
-                <Button content={'LOGIN'} type='submit' />
+                <Button
+                    content={isRegister ? 'REGISTER' : 'LOGIN'}
+                    type='submit'
+                    style={{ marginTop: '10px' }}
+                />
             </form>
-            <div className={lostPw}>Lost your password</div>
+            <Button
+                content={
+                    isRegister
+                        ? 'Already have an account?'
+                        : `Don't have an account?`
+                }
+                type='submit'
+                isPrimary={false}
+                style={{ marginTop: '10px' }}
+                onClick={handleToggle}
+            />
+            {!isRegister && <div className={lostPw}>Lost your password</div>}
         </div>
     );
 }
