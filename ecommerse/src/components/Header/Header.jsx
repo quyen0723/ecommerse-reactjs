@@ -10,7 +10,11 @@ import useScrollHandling from '@/hooks/useScrollHandling';
 import { useContext, useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { SideBarContext } from '@/contexts/SideBarProvider';
-
+import { TfiReload } from 'react-icons/tfi';
+import { CiHeart } from 'react-icons/ci';
+import { PiShoppingCartThin } from 'react-icons/pi';
+import { PiShoppingCartSimpleBold } from 'react-icons/pi';
+import { BsHeart } from 'react-icons/bs';
 function MyHeader() {
     const {
         containerBoxIcon,
@@ -26,13 +30,12 @@ function MyHeader() {
     const { scrollPosition } = useScrollHandling();
     const [fixedPosition, setFixedPosition] = useState(false);
 
-    console.log('MMMMMM', scrollPosition);
+    const { setIsOpen, setType } = useContext(SideBarContext);
 
-    const { isOpen, setIsOpen } = useContext(SideBarContext);
-
-    console.log('lalalala', isOpen);
-    console.log('huhuhuhu', setIsOpen);
-    console.log('check', { isOpen, setIsOpen });
+    const handleOpenSideBar = (type) => {
+        setIsOpen(true);
+        setType(type);
+    };
 
     useEffect(() => {
         // if (scrollPosition > 80) {
@@ -41,7 +44,7 @@ function MyHeader() {
         //     setFixedPosition(false);
         // }
 
-        setFixedPosition(scrollPosition > 80 ? true : false);
+        setFixedPosition(scrollPosition > 80);
     }, [scrollPosition]);
 
     return (
@@ -81,19 +84,48 @@ function MyHeader() {
                 </div>
                 <div className={containerBox}>
                     <div className={containerMenu}>
-                        {dataMenu.slice(3).map((item, index) => (
-                            <Menu
-                                key={item.id || index + 3} // Ensure unique key for this slice
-                                content={item.content}
-                                href={item.href}
-                                setIsOpen={setIsOpen}
-                            />
-                        ))}
+                        {dataMenu
+                            .slice(3, dataMenu.length)
+                            .map((item, index) => (
+                                <Menu
+                                    key={item.id || index + 3} // Ensure unique key for this slice
+                                    content={item.content}
+                                    href={item.href}
+                                    setIsOpen={setIsOpen}
+                                />
+                            ))}
                     </div>
                     <div className={containerBoxIcon}>
-                        <img src={reloadIcon} alt='reloadIcon' />
-                        <img src={heartIcon} alt='heartIcon' />
-                        <img src={cartIcon} alt='cartIcon' />
+                        {/* <img
+                            width={26}
+                            height={26}
+                            src={reloadIcon}
+                            alt='reloadIcon'
+                        />
+                        <img
+                            width={26}
+                            height={26}
+                            src={heartIcon}
+                            alt='heartIcon'
+                        />
+                        <img
+                            width={26}
+                            height={26}
+                            src={cartIcon}
+                            alt='cartIcon'
+                        /> */}
+                        <TfiReload
+                            style={{ fontSize: '20px' }}
+                            onClick={() => handleOpenSideBar('compare')}
+                        />
+                        <BsHeart
+                            style={{ fontSize: '20px' }}
+                            onClick={() => handleOpenSideBar('wishlist')}
+                        />
+                        <PiShoppingCartSimpleBold
+                            style={{ fontSize: '20px' }}
+                            onClick={() => handleOpenSideBar('cart')}
+                        />
                     </div>
                 </div>
             </div>
