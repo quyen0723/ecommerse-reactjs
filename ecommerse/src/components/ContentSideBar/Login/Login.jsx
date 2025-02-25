@@ -1,13 +1,17 @@
 import InputCommon from '@components/InputCommon/InputCommon';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import styles from './styles.module.scss';
 import Button from '@components/Button/Button';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { ToastContext } from '@/contexts/ToasProvider';
+import { register } from '@/apis/authService';
 
 function Login() {
     const { container, title, boxRememberMe, lostPw } = styles;
     const [isRegister, setIsRegister] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const { toast } = useContext(ToastContext);
     const formik = useFormik({
         initialValues: {
             email: '',
@@ -25,11 +29,33 @@ function Login() {
                 'Password must match'
             )
         }),
-        onSubmit: (values) => {
+        onSubmit: async (values) => {
             console.log('Form submitted:', values);
+            if (isLoading) return;
+
+            if (isRegister) {
+                const { email: username, password } = values;
+                setIsLoading(true);
+                await register({ username, password }).then((res) => {
+                    console.log(res);
+                    toast.success(res.data.message);
+                    setIsLoading(false);
+                }).catch((err) => {
+                    console.log(err);
+                    toast.error(err.response.data.message);
+                    setIsLoading(false);
+                });
+            }
         }
     });
 
+    /*************  ✨ Codeium Command ⭐  *************/
+    /**
+     * Toggle register/login form
+     * @function
+     * @returns {void}
+     */
+    /******  ba72ddc8-a9f1-4d79-b87d-a24aa11811c2  *******/
     const handleToggle = () => {
         setIsRegister(!isRegister);
         formik.resetForm();
@@ -71,9 +97,10 @@ function Login() {
                 )}
 
                 <Button
-                    content={isRegister ? 'REGISTER' : 'LOGIN'}
+                    content={isLoading ? "LOADING..." : isRegister ? 'REGISTER' : 'LOGIN'}
                     type='submit'
                     style={{ marginTop: '10px' }}
+                // onClick={() => toast.success('Login success')}
                 />
             </form>
             <Button
